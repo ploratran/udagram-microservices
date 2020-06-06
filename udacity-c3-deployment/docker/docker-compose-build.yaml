@@ -1,0 +1,18 @@
+version: "3"
+services:
+  reverseproxy:
+    build:
+      context: .
+    image: ploratran/udagram-reverse-proxy 
+  backend_user:
+    build:
+      context: ../../udacity-c3-restapi-user
+    image: ploratran/udacity-restapi-user
+  backend_feed:
+    build:
+      context: ../../udacity-c3-restapi-feed  
+    image: ploratran/udacity-restapi-feed
+  frontend:
+    build:
+      context: ../../udacity-c3-frontend  
+    image: ploratran/udacity-frontend:local
