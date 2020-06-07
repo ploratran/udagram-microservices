@@ -1,0 +1,36 @@
+# specify language used
+# minimal or generic => n language specific, can be node_js, Docker, ...
+language: generic
+
+# specify to use Docker
+services: 
+    - docker
+
+# safelist
+# specify git branches to by built from 
+branches: 
+    only: 
+        - master
+        - dev
+
+# define public environment that are not sensitive data
+# use docker compose version of 1.25.5
+env: 
+    - DOCKER_COMPOSE_VERSION=1.25.5
+
+# custom script: use chmod +x
+before_install:
+    # reinstall docker manually 
+    - docker -v && docker-compose -v
+    - sudo rm /usr/local/bin/docker-compose
+    - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+    - chmod +x docker-compose
+    - sudo mv docker-compose /usr/local/bin
+    # reinstall kubernetes manually 
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl
+    - sudo mv ./kubectl /usr/local/bin/kubectl
+
+install: 
+    - docker-compose -f udagram-microservices/udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel
+    - docker-compose -f udagram-microservices/udacity-c3-deployment/docker/docker-compose-build.yaml push
