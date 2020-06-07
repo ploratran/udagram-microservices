@@ -47,6 +47,9 @@ language: minimal
 services: docker
 env:
   - DOCKER_COMPOSE_VERSION=1.23.2
+# # Git clone depth: allow CI to clone repo to a max num of depth: 
+git: 
+    depth: 10
 before_install:
   - docker -v && docker-compose -v
   - sudo rm /usr/local/bin/docker-compose
