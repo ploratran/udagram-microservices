@@ -11,7 +11,10 @@ services:
 branches: 
     only: 
         - master
-        - dev
+
+# Git clone depth: allow CI to clone repo to a max num of depth: 
+git: 
+    depth: 10
 
 # define public environment that are not sensitive data
 # use docker compose version of 1.25.5
@@ -32,6 +35,8 @@ before_install:
     - sudo mv ./kubectl /usr/local/bin/kubectl
 
 install: 
-    - docker-compose -f udagram-microservices/udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel
-    - docker-compose -f udagram-microservices/udacity-c3-deployment/docker/docker-compose-build.yaml push
-    - docker-compose up
+    - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel
+    
+after_success:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml push
