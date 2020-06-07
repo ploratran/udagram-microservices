@@ -8,10 +8,10 @@ services:
 
 # safelist
 # specify git branches to by built from 
-branches: 
-    only: 
-        - master
-        - dev
+# branches: 
+#     only: 
+#         - master
+#         - dev
 
 # define public environment that are not sensitive data
 # use docker compose version of 1.25.5
