@@ -6,13 +6,18 @@ The project is split into three parts:
 1. [The Simple Frontend](./udacity-c3-frontend)
 A basic Ionic client web application which consumes the RestAPI Backend. 
 - **Frontend:** port 8100. 
+- frontend use port 80 but forward to port 8100 of the localhost. 
 - **Command:** `npm run start` or `ionic serve`
 2. [The RestAPI Feed Backend](./udacity-c3-restapi-feed), a Node-Express feed microservice.
 - **Feed Backend:** port 8080
+- don't need to portforward port 8080 to localhost due to passs reverseproxy port
 - **Command:** `npm run dev` or `npm run prod` 
 3. [The RestAPI User Backend](./udacity-c3-restapi-user), a Node-Express user microservice.
-- **User Backend:** port 8080
+- **User Backend:** port 8080. 
+- don't need to portforward port 8080 to localhost due to passs reverseproxy port
 - **Command:** `npm run dev` or `npm run prod` 
+4. **Revers Proxy** port 8080
+- Reverseproxy runs at port 8080, same as backend-feed and backend-user server. 
 
 ## Getting Setup
 

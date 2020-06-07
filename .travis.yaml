@@ -1,43 +1,63 @@
-# specify language used
-# minimal or generic => n language specific, can be node_js, Docker, ...
-language: generic
+# # specify language used
+# # minimal or generic => n language specific, can be node_js, Docker, ...
+# language: generic
 
-# specify to use Docker
-services: 
-    - docker
+# # specify to use Docker
+# services: 
+#     - docker
 
-# safelist
-# specify git branches to by built from 
-branches: 
-    only: 
-        - master
+# # safelist
+# # specify git branches to by built from 
+# branches: 
+#     only: 
+#         - master
 
-# Git clone depth: allow CI to clone repo to a max num of depth: 
-git: 
-    depth: 10
+# # Git clone depth: allow CI to clone repo to a max num of depth: 
+# git: 
+#     depth: 10
 
-# define public environment that are not sensitive data
-# use docker compose version of 1.25.5
-env: 
-    - DOCKER_COMPOSE_VERSION=1.25.5
+# # define public environment that are not sensitive data
+# # use docker compose version of 1.25.5
+# env: 
+#     - DOCKER_COMPOSE_VERSION=1.25.5
 
-# custom script: use chmod +x
-before_install:
-    # reinstall docker manually 
-    - docker -v && docker-compose -v
-    - sudo rm /usr/local/bin/docker-compose
-    - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-    - chmod +x docker-compose
-    - sudo mv docker-compose /usr/local/bin
-    # reinstall kubernetes manually 
-    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-    - chmod +x ./kubectl
-    - sudo mv ./kubectl /usr/local/bin/kubectl
+# # custom script: use chmod +x
+# before_install:
+#     # reinstall docker manually 
+#     - docker -v && docker-compose -v
+#     - sudo rm /usr/local/bin/docker-compose
+#     - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+#     - chmod +x docker-compose
+#     - sudo mv docker-compose /usr/local/bin
+#     # reinstall kubernetes manually 
+#     - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+#     - chmod +x ./kubectl
+#     - sudo mv ./kubectl /usr/local/bin/kubectl
 
-install: 
-    - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel
+# install: 
+#     - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel
     
 
-after_success:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml push
+# after_success:
+#     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+#     - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml push
+
+
+language: minimal
+services: docker
+env:
+  - DOCKER_COMPOSE_VERSION=1.23.2
+before_install:
+  - docker -v && docker-compose -v
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+  - chmod +x ./kubectl
+  - sudo mv ./kubectl /usr/local/bin/kubectl
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - echo 'dockerhub credentials configured'
+install:
+  - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel 
+  - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml push
