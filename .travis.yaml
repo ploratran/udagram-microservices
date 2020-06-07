@@ -8,10 +8,13 @@ services:
 
 # safelist
 # specify git branches to by built from 
-# branches: 
-#     only: 
-#         - master
-#         - dev
+branches: 
+    only: 
+        - master
+
+# Git clone depth: allow CI to clone repo to a max num of depth: 
+git: 
+    depth: 10
 
 # define public environment that are not sensitive data
 # use docker compose version of 1.25.5
