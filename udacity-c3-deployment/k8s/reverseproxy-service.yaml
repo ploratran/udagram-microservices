@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: udagram-reverse-proxy
-  name: udagram-reverse-proxy-svc
+  name: udagram-reverse-proxy
 spec:
   ports:
   - name: "8080"

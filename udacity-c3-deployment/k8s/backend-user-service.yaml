@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: backend-user
-  name: backend-user-svc
+  name: backend-user
 spec:
   ports:
   - name: "8080"
